@@ -1,27 +1,37 @@
-with open ('input1.txt','r', encoding='utf-8') as f:
-    ifc=f.read()
+class Player():
+    # Инициализация полей
+    def __init__(self, name, category):
+        self.name = name
+        self.category = category
 
-with open('fwords.txt', 'r', encoding='utf-8') as fwords:
-    fwl=fwords.read().split()
+    # Определяем метод, для вывода информации о игроке 
+    def who_am_i(self):
+        print(f"My name is {self.name} and i have a category {self.category}")
 
-def find_substr(line, word):
-    ind=[]
-    t_line=line.lower()
-    i=0
-    while i<len(t_line):
-        j=t_line.find(word,i)
-        if j==-1:
-            break
-        ind.append(j)
-        i=j+len(word)
-    return ind
+class Sniper(Player):
+    def __init__(self, name, damage, hp):
+        # вызываем конструктор наследуемового класса
+        super().__init__(name, "Sniper")
+        # Дополняем конструктор новым свойством
+        self._damage = damage # Защищённое свойство
+        self._hp = hp # Защищённое свойство
 
-out_content=ifc
+        self.__common_damage = 0 # Приватное свойство
 
-for word in fwl:
-    ind=find_substr(out_content, word)
+    def attack(self):
+        self.__common_damage += self._damage
+        self._hp -= 14
+        print(f"Нанесённый урон {self.__common_damage}")
+    
+    def my_health(self):
+        print(f"Ваше здоровье: {self._hp}")
 
-    for index in ind:
-        out_content=(out_content[:index]+'*'*len(word)+out_content[index+len(word):])
+player = Sniper("Ivan", 52, 100)
+player.who_am_i()
 
-print(out_content)
+player.my_health()
+
+player.attack()
+player.attack()
+
+player.my_health()
